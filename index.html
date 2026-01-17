@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abyros [10]</title>
+    <style>
+        /* --- MOTOR DE ANIMACIONES CARMESÍ --- */
+        @keyframes masterFade { from { opacity: 0; filter: blur(20px); } to { opacity: 1; filter: blur(0); } }
+        
+        @keyframes bloodGlitch {
+            0% { transform: translate(0); text-shadow: 2px 2px #8b0000, -2px -2px #dc143c; }
+            2% { transform: translate(-5px, 5px); color: #fff; }
+            4% { transform: translate(-5px, -5px); text-shadow: -5px 5px #8b0000, 5px -5px #dc143c; }
+            6% { transform: translate(5px, 5px); }
+            8% { transform: translate(5px, -5px); text-shadow: 5px -5px #8b0000, -5px 5px #dc143c; color: #ff6b6b; }
+            10% { transform: translate(0); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes bloodDrip {
+            0% { text-shadow: 0 0 10px #dc143c; color: #dc143c; }
+            25% { text-shadow: 0 5px 15px #8b0000; color: #b91230; }
+            50% { text-shadow: 0 10px 20px #4a0000; color: #8b0000; }
+            75% { text-shadow: 0 5px 15px #8b0000; color: #b91230; }
+            100% { text-shadow: 0 0 10px #dc143c; color: #dc143c; }
+        }
+
+        @keyframes crimsonPulse {
+            0% { color: #4a0000; text-shadow: 0 0 5px #4a0000; }
+            50% { color: #dc143c; text-shadow: 0 0 20px #dc143c, 0 0 40px #8b0000; }
+            100% { color: #4a0000; text-shadow: 0 0 5px #4a0000; }
+        }
+
+        @keyframes violentShake {
+            0% { transform: translate(0) rotate(0deg); }
+            10% { transform: translate(-2px, 2px) rotate(-1deg); }
+            20% { transform: translate(2px, -2px) rotate(1deg); }
+            30% { transform: translate(-3px, 1px) rotate(-2deg); }
+            40% { transform: translate(3px, -1px) rotate(2deg); }
+            50% { transform: translate(-1px, -2px) rotate(-1deg); }
+            60% { transform: translate(1px, 2px) rotate(1deg); }
+            70% { transform: translate(-2px, -1px) rotate(-1deg); }
+            80% { transform: translate(2px, 1px) rotate(1deg); }
+            90% { transform: translate(-1px, -1px) rotate(0deg); }
+            100% { transform: translate(0) rotate(0deg); }
+        }
+
+        @keyframes bloodFlow {
+            0% { filter: hue-rotate(0deg) brightness(1); }
+            25% { filter: hue-rotate(10deg) brightness(1.2); }
+            50% { filter: hue-rotate(0deg) brightness(0.8); }
+            75% { filter: hue-rotate(-10deg) brightness(1.1); }
+            100% { filter: hue-rotate(0deg) brightness(1); }
+        }
+
+        @keyframes borderPulse { 
+            0% { border-color: #4a0000; box-shadow: 0 0 10px #4a0000; } 
+            50% { border-color: #dc143c; box-shadow: 0 0 40px #dc143c, inset 0 0 20px #dc143c; } 
+            100% { border-color: #4a0000; box-shadow: 0 0 10px #4a0000; } 
+        }
+
+        @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(1200%); } }
+        
+        @keyframes bloodAlert {
+            0% { background: #0a0000; box-shadow: none; border-color: #8b0000; }
+            10% { background: #300000; box-shadow: 0 0 100px #dc143c; border-color: #fff; }
+            20% { background: #0a0000; border-color: #8b0000; }
+            30% { background: #300000; box-shadow: 0 0 100px #dc143c; border-color: #fff; }
+            40% { background: #0a0000; border-color: #8b0000; }
+            100% { background: #0a0000; border-color: #8b0000; }
+        }
+
+        @keyframes executionFlash {
+            0% { border-left: 10px solid #8b0000; background: #0d0000; }
+            25% { border-left: 30px solid #dc143c; box-shadow: -20px 0 50px #8b0000, inset 0 0 30px #300; background: #1a0000; }
+            50% { border-left: 40px solid #dc143c; box-shadow: -30px 0 80px #8b0000, inset 0 0 50px #600; background: #0f0000; }
+            75% { border-left: 30px solid #dc143c; box-shadow: -20px 0 50px #8b0000, inset 0 0 30px #300; background: #1a0000; }
+            100% { border-left: 10px solid #8b0000; background: #0d0000; }
+        }
+
+        @keyframes rotateSword { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
+        @keyframes textFocus {
+            0% { letter-spacing: -20px; opacity: 0; filter: blur(20px); }
+            100% { letter-spacing: 20px; opacity: 1; filter: blur(0); }
+        }
+
+        @keyframes eyePulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; text-shadow: 0 0 30px #dc143c; color: #fff; }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+
+        @keyframes shakeAggressive {
+            0% { transform: translate(0); }
+            10% { transform: translate(-3px, -3px); }
+            20% { transform: translate(3px, 3px); }
+            30% { transform: translate(-3px, 3px); }
+            40% { transform: translate(3px, -3px); }
+            50% { transform: translate(-2px, 2px); }
+            60% { transform: translate(2px, -2px); }
+            70% { transform: translate(-1px, 1px); }
+            80% { transform: translate(1px, -1px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes typewriter { from { width: 0; } to { width: 100%; } }
+        
+        @keyframes blinkCursor { from, to { border-color: transparent } 50% { border-color: var(--crimson-pure); } }
+
+        @keyframes shadowPulse {
+            0% { box-shadow: 0 0 10px rgba(220, 20, 60, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(220, 20, 60, 0.6), inset 0 0 20px rgba(139, 0, 0, 0.1); }
+            100% { box-shadow: 0 0 10px rgba(220, 20, 60, 0.2); }
+        }
+
+        @keyframes fillBar { from { width: 0%; } }
+
+        @keyframes textReveal {
+            0% { color: #2a0000; opacity: 0.5; }
+            100% { color: #c9c9c9; opacity: 1; }
+        }
+
+        :root {
+            --crimson-pure: #dc143c;
+            --crimson-dark: #4a0000;
+            --blood-red: #8b0000;
+            --bg-black: #0a0000;
+            --bg-deep: #050000;
+            --panel-bg: #1a0000;
+            --text-main: #d4a5a5;
+            --text-dark: #8b6b6b;
+        }
+
+        /* --- ESTILOS GLOBALES --- */
+        * { box-sizing: border-box; cursor: crosshair; }
+        body {
+            background: linear-gradient(180deg, #000000 0%, #1a0000 50%, #0a0000 100%);
+            color: var(--text-main);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0; padding: 0;
+            line-height: 1.8;
+            overflow-x: hidden;
+            animation: masterFade 1.5s ease-out, bloodFlow 10s infinite;
+        }
+
+        /* LÍNEA DE ESCANEO ACTIVA */
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 5px;
+            background: rgba(220, 20, 60, 0.15); z-index: 5000; pointer-events: none;
+            animation: scanline 3s linear infinite;
+        }
+
+        .container { max-width: 1500px; margin: 0 auto; padding: 100px 50px; }
+
+        /* --- REPRODUCTOR DE MÚSICA CARMESÍ --- */
+        .music-player {
+            position: fixed; top: 20px; right: 20px; z-index: 6000;
+            background: rgba(10, 0, 0, 0.95); border: 1px solid var(--crimson-pure);
+            padding: 15px; width: 320px;
+            box-shadow: 0 0 30px rgba(220, 20, 60, 0.3);
+            animation: shakeAggressive 5s infinite;
+        }
+        .music-player h5 { 
+            margin: 0 0 10px 0; font-size: 0.6rem; 
+            color: var(--crimson-pure); letter-spacing: 2px; 
+            animation: bloodGlitch 3s infinite;
+        }
+        .music-player audio { width: 100%; height: 30px; }
+
+        /* --- HEADER PRINCIPAL --- */
+        .main-header {
+            border-bottom: 3px solid var(--crimson-pure); 
+            padding-bottom: 60px; margin-bottom: 120px;
+            display: flex; justify-content: space-between; align-items: flex-end;
+        }
+
+        .subject-title h1 {
+            font-size: 8rem; margin: 0; letter-spacing: 30px; color: #fff;
+            text-transform: uppercase; 
+            animation: bloodGlitch 4s infinite, textFocus 2s ease-out;
+        }
+
+        .status-box {
+            border: 4px solid var(--crimson-pure); padding: 40px; 
+            background: #0a0000; text-align: right; 
+            animation: borderPulse 2s infinite;
+        }
+        .status-box .serial { font-size: 3.5rem; font-weight: 900; display: block; line-height: 1; }
+        .status-box .rank { color: var(--crimson-pure); font-size: 1.8rem; letter-spacing: 5px; font-weight: bold; }
+
+        /* --- COMBAT STATS (ULTRA AGRESIVO) --- */
+        .combat-stats {
+            display: grid; grid-template-columns: repeat(3, 1fr); 
+            gap: 40px; margin-bottom: 150px;
+        }
+        .role-card {
+            background: linear-gradient(135deg, #0a0000 0%, #1a0000 100%); 
+            border: 1px solid #2a0000; padding: 50px;
+            text-align: center; position: relative; overflow: hidden;
+        }
+        .role-card.attack-mode { 
+            animation: bloodAlert 3s infinite; 
+            border: 2px solid var(--crimson-pure); 
+        }
+        .role-card h3 { 
+            font-size: 1.5rem; letter-spacing: 5px; 
+            margin-bottom: 20px; 
+            animation: bloodDrip 3s infinite, violentShake 5s infinite;
+            color: var(--crimson-pure);
+        }
+        .role-val { 
+            font-size: 4rem; font-weight: 900; 
+            color: var(--crimson-pure); display: block;
+            animation: crimsonPulse 2s infinite;
+        }
+        
+        .progress-container { 
+            background: #1a0000; height: 15px; margin-top: 20px; 
+            border: 1px solid #3a0000; overflow: hidden;
+        }
+        .progress-bar { 
+            height: 100%; background: var(--crimson-pure); 
+            animation: fillBar 4s ease-out; 
+        }
+
+        /* --- SIMBOLOGÏA ANIMADA --- */
+        h2.section-title {
+            font-size: 2.8rem; color: var(--crimson-pure); letter-spacing: 15px; 
+            text-transform: uppercase;
+            border-left: 12px solid var(--crimson-pure); 
+            padding-left: 40px; margin-bottom: 80px;
+            animation: bloodDrip 8s infinite, textFocus 2.5s ease-out;
+        }
+
+        .symbol-grid {
+            display: grid; grid-template-columns: 1fr 1fr; 
+            gap: 50px; margin-bottom: 150px;
+        }
+        .symbol-box {
+            border: 1px solid #2a0000; padding: 40px; 
+            background: linear-gradient(135deg, #0a0000 0%, #150000 100%);
+            text-align: center;
+            animation: shadowPulse 4s infinite;
+        }
+        .symbol-box h4 {
+            color: var(--crimson-pure);
+            animation: crimsonPulse 4s infinite;
+        }
+        .symbol-box p {
+            color: var(--text-dark);
+        }
+        .symbol-icon { font-size: 4rem; margin-bottom: 20px; display: inline-block; }
+        .sword-anim { animation: rotateSword 10s linear infinite; color: #8b0000; }
+        .eye-anim { animation: eyePulse 3s ease-in-out infinite; color: #dc143c; }
+
+        /* --- PORTRAIT FRAME --- */
+        .portrait-frame {
+            width: 550px; margin: 0 auto 50px; 
+            border: 1px solid #3a0000; padding: 15px;
+            background: #000; position: relative;
+            animation: shakeAggressive 10s infinite;
+        }
+        .portrait-img { 
+            width: 100%; height: 600px; 
+            background: radial-gradient(circle, #1a0000, #000); 
+            display: flex; align-items: center; justify-content: center; 
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        /* --- BOTÓN ACCESO FASES --- */
+        .access-phases-btn {
+            display: inline-block; margin: 40px auto; padding: 35px 80px;
+            background: #0a0000; border: 2px solid var(--crimson-pure); 
+            color: #fff; text-decoration: none;
+            font-size: 1.8rem; font-weight: bold; letter-spacing: 15px;
+            transition: 0.4s; animation: shakeAggressive 2s infinite;
+            display: block; text-align: center; width: 80%; margin: 40px auto 100px;
+        }
+        .access-phases-btn:hover { 
+            background: var(--crimson-pure); color: #000; 
+            box-shadow: 0 0 80px var(--crimson-pure); 
+        }
+
+        /* --- PROTOCOLOS DE EJECUCIÓN (ULTRA ANIMADOS) --- */
+        .execution-section {
+            margin-bottom: 180px;
+        }
+        .execution-grid {
+            display: grid; grid-template-columns: 1fr 1fr; 
+            gap: 40px; margin-bottom: 150px;
+        }
+        .execution-card {
+            background: #0d0000; 
+            border-left: 10px solid var(--crimson-pure); 
+            padding: 40px;
+            position: relative;
+            animation: executionFlash 4s infinite;
+            overflow: hidden;
+        }
+        .execution-card::before {
+            content: "LETHAL";
+            position: absolute; top: 10px; right: 20px;
+            font-size: 0.5rem; color: #dc143c;
+            font-weight: bold; letter-spacing: 3px;
+            animation: bloodGlitch 1s infinite;
+        }
+        .execution-card h4 { 
+            color: var(--crimson-pure); font-size: 1.4rem; 
+            margin-bottom: 20px; letter-spacing: 3px; 
+            animation: bloodGlitch 3s infinite;
+        }
+        .execution-card p { 
+            color: #999; font-size: 0.95rem; line-height: 1.8;
+            animation: textReveal 5s infinite alternate;
+        }
+
+        /* --- VITAL DASHBOARD --- */
+        .vital-grid { 
+            display: grid; grid-template-columns: 1fr 1fr; 
+            gap: 60px; margin-bottom: 180px; 
+        }
+        .vital-card { 
+            background: #0a0000; padding: 50px; 
+            border-left: 6px solid var(--crimson-pure); 
+            position: relative;
+            animation: shadowPulse 5s infinite;
+        }
+        .vital-card::before { 
+            content: "LIVE FEED"; 
+            position: absolute; top: 10px; right: 20px; 
+            font-size: 0.6rem; color: #dc143c; 
+            animation: bloodGlitch 1s infinite; 
+        }
+        .vital-label { 
+            display: flex; justify-content: space-between; 
+            font-weight: bold; letter-spacing: 4px; 
+            color: var(--crimson-pure); margin-bottom: 15px;
+            animation: bloodGlitch 3s infinite; 
+        }
+        .bar-outer { 
+            height: 35px; background: #000; 
+            border: 1px solid #2a0000; padding: 5px; 
+            margin-top: 15px; 
+        }
+        .bar-inner { height: 100%; }
+        .hp-fill { 
+            width: 100%; 
+            background: linear-gradient(90deg, #4a0000, #dc143c); 
+            animation: fillBar 3s ease-in-out; 
+        }
+        .blood-fill { 
+            width: 100%; 
+            background: linear-gradient(90deg, #2a0000, #8b0000); 
+            animation: fillBar 5s ease-in-out; 
+        }
+
+        /* --- BLOQUES DE INFORMACIÓN --- */
+        .info-grid { 
+            display: grid; grid-template-columns: 1fr 1fr; 
+            gap: 100px; margin-bottom: 180px; 
+        }
+        .text-block { 
+            background: linear-gradient(135deg, #0a0000 0%, #150000 100%);
+            padding: 60px; border: 1px solid #2a0000; 
+            position: relative;
+            animation: shadowPulse 6s infinite;
+        }
+        .text-block::after { 
+            content: "CLASSIFIED"; 
+            position: absolute; bottom: 10px; right: 10px; 
+            font-size: 0.6rem; color: #3a0000; 
+        }
+        .text-block h4 { 
+            color: var(--crimson-pure); text-transform: uppercase; 
+            margin-top: 0; letter-spacing: 5px; 
+            font-size: 1.4rem; margin-bottom: 25px;
+            animation: crimsonPulse 4s infinite; 
+        }
+        .text-block p { 
+            text-align: justify; color: var(--text-dark); 
+            font-size: 1rem; margin-bottom: 30px;
+            animation: textReveal 7s infinite alternate;
+        }
+        .text-block strong {
+            animation: bloodDrip 3s infinite;
+        }
+
+        /* --- TERMINAL LOGS --- */
+        .log-terminal {
+            background: linear-gradient(135deg, #0a0000 0%, #1a0000 100%);
+            border: 1px solid #8b0000; 
+            padding: 40px; font-size: 0.85rem; color: #dc143c; 
+            margin-bottom: 150px; line-height: 2; 
+            border-top: 5px solid #8b0000;
+            box-shadow: inset 0 0 20px #1a0000;
+            animation: shadowPulse 8s infinite, bloodFlow 15s infinite;
+        }
+
+        /* --- CITAS DE ABYROS --- */
+        .quotes-section {
+            background: linear-gradient(180deg, #000 0%, #1a0000 100%);
+            border: 2px solid var(--crimson-pure); 
+            padding: 100px 50px; margin-bottom: 150px;
+            text-align: center; position: relative;
+            animation: borderPulse 2s infinite, shadowPulse 4s infinite;
+        }
+        .quotes-section::after { 
+            content: "⚔"; position: absolute; 
+            top: 20px; left: 50%; transform: translateX(-50%); 
+            font-size: 3rem; color: #300; 
+        }
+        .quotes-section h2 {
+            font-size: 2.5rem; color: var(--crimson-pure); 
+            letter-spacing: 10px; text-transform: uppercase;
+            margin-bottom: 50px; 
+            animation: bloodDrip 5s infinite, violentShake 10s infinite;
+        }
+        .quote-item {
+            margin-bottom: 40px; border-bottom: 1px dashed #3a0000; 
+            padding-bottom: 30px;
+        }
+        .quote-text {
+            color: var(--text-main); font-size: 1.4rem; 
+            font-style: italic; display: block;
+            margin: 20px auto; padding: 0 50px;
+            animation: textReveal 6s infinite alternate, crimsonPulse 8s infinite;
+        }
+        .quote-author {
+            color: var(--crimson-pure); font-size: 1rem; 
+            margin-top: 20px; letter-spacing: 5px;
+            animation: bloodDrip 2s infinite;
+        }
+
+        /* --- BOTÓN FINAL DE NAVEGACIÓN --- */
+        .final-nav-btn {
+            display: block; width: 100%; padding: 60px; 
+            background: #000; border: 3px solid var(--crimson-pure); 
+            color: #fff; font-size: 2.5rem;
+            text-decoration: none; letter-spacing: 40px; 
+            font-weight: 900; transition: 0.5s; 
+            text-align: center; text-transform: uppercase;
+            animation: borderPulse 1s infinite;
+        }
+        .final-nav-btn:hover { 
+            background: var(--crimson-pure); color: #000; 
+            letter-spacing: 50px; 
+            box-shadow: 0 0 100px var(--crimson-pure);
+        }
+
+        footer { 
+            text-align: center; padding: 100px; 
+            font-size: 0.7rem; color: #4a4a4a; 
+            letter-spacing: 15px; border-top: 1px solid #1a0000; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="music-player">
+    <h5>Glass Between Your Teeth</h5>
+    <audio controls loop>
+        <source src="music.mp3" type="audio/mpeg">
+        Audio no soportado.
+    </audio>
+    <div style="font-size: 0.5rem; color: #666; margin-top: 5px; text-align: right;">
+        ENGLISH VERSION: <a href="abyros_eng.html" style="color: #999;">ABYROS_ENG.HTML</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <header class="main-header">
+        <div class="subject-title">
+            <span style="color: var(--crimson-pure); font-weight: bold; letter-spacing: 5px;">DEMONIO</span>
+            <h1>ABYROS</h1>
+            <p style="color: #555; letter-spacing: 8px; margin: 10px 0; animation: bloodGlitch 2s infinite;">EL ÁNGEL DE LA VIOLENCIA</p>
+        </div>
+
+        <div class="status-box">
+            <span class="rank">STATUS: SS+</span>
+            <span class="serial">LEYEND #010</span>
+            <span style="font-size: 0.7rem; color: #666; display: block; margin-top: 10px;">LAST UPDATE: 2026-01-14</span>
+        </div>
+    </header>
+
+    <section class="combat-stats">
+        <div class="role-card attack-mode">
+            <div style="font-size: 0.7rem; color: #dc143c; font-weight: bold; margin-bottom: 10px;">[ WARNING: LETHAL FORCE AUTHORIZED ]</div>
+            <h3>ATAQUE</h3>
+            <span class="role-val">9.9</span>
+            <div class="progress-container"><div class="progress-bar" style="width: 99%;"></div></div>
+            <p style="font-size: 0.7rem; color: #777; margin-top: 15px;">EJECUCIÓN ABSOLUTA - SIN PIEDAD</p>
+        </div>
+        <div class="role-card">
+            <h3>DEFENSA</h3>
+            <span class="role-val">6.8</span>
+            <div class="progress-container"><div class="progress-bar" style="width: 68%;"></div></div>
+            <p style="font-size: 0.7rem; color: #777; margin-top: 15px;">REGENERACIÓN POR ABSORCIÓN DE SANGRE</p>
+        </div>
+        <div class="role-card">
+            <h3>APOYO</h3>
+            <span class="role-val">2.1</span>
+            <div class="progress-container"><div class="progress-bar" style="width: 21%;"></div></div>
+            <p style="font-size: 0.7rem; color: #777; margin-top: 15px;">EJECUTOR SOLITARIO - NO COOPERA</p>
+        </div>
+    </section>
+
+    <h2 class="section-title">Análisis Simbólico</h2>
+    <section class="symbol-grid">
+        <div class="symbol-box">
+            <div class="symbol-icon sword-anim">⚔️</div>
+            <h4>La Bloodreaper</h4>
+            <p>Espada de ejecución demoníaca que absorbe el 100% de la sangre y energía vital que toca. No solo hiere; la espada "elige" matar. Cada ejecución alimenta a Abyros, actuando como anclaje que le impide perder la razón por completo. Es extensión de su voluntad corrupta.</p>
+        </div>
+        <div class="symbol-box">
+            <div class="symbol-icon eye-anim">👁️</div>
+            <h4>El Ojo Fragmentado</h4>
+            <p>Su ojo izquierdo destrozado por la traición de Lucario. Representa el momento en que perdió su inocencia y ganó la visión del abismo. A través de él, puede percibir el miedo y la debilidad en sus víctimas, convirtiéndolo en el "Profeta de la Aniquilación".</p>
+        </div>
+    </section>
+
+   <section style="text-align: center; margin-bottom: 100px;">
+    <div class="portrait-frame">
+        <div class="portrait-img" style="background: none; padding: 0; overflow: hidden;">
+            <img src="apariencia.jpg" alt="Abyros - Leyend 010" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+        </div>
+        <div style="text-align: right; font-size: 0.7rem; color: #555; padding: 10px; border-top: 1px solid #1a0000;">
+            ARTISTA REGISTRADO: <span style="color: #fff;">Leosaur Hibris</span>
+        </div>
+    </div>
+    <a href="abyros_fases.html" class="access-phases-btn">ACCEDER A FASES DE COMBATE →</a>
+</section>
+
+    <h2 class="section-title">Protocolos de Ejecución</h2>
+    <section class="execution-section">
+        <div class="execution-grid">
+            <div class="execution-card">
+                <h4>#01: CRIMSON HARVEST</h4>
+                <p>Abyros entra en sincronía total con la Bloodreaper. La espada absorbe toda la sangre del objetivo en un instante, dejando solo un cascarón vacío. El proceso es dolorosamente lento desde la perspectiva de la víctima, experimentando cada segundo de su desangrado.</p>
+            </div>
+            <div class="execution-card">
+                <h4>#02: TRAITOR'S PENANCE</h4>
+                <p>Diseñado específicamente para aquellos que traicionan. Abyros replica el dolor que sintió cuando fue empujado al abismo, cortando lentamente mientras susurra los nombres de cada traición. La muerte llega solo cuando la víctima comprende completamente su error.</p>
+            </div>
+            <div class="execution-card">
+                <h4>#03: HELL'S EMBRACE</h4>
+                <p>Utilizado contra múltiples enemigos. Abyros libera la energía demoníaca acumulada en un radio de 50 metros, convirtiendo el área en un reflejo del infierno que habitó. Los enemigos experimentan décadas de tormento en segundos antes de su extinción.</p>
+            </div>
+            <div class="execution-card">
+                <h4>#04: INNOCENT'S REQUIEM</h4>
+                <p>El protocolo más devastador. Abyros canaliza el dolor de su yo pasado, el Sylveon Shiny tímido y asustadizo. La víctima experimenta la agonía completa de la transformación de inocencia a demonio. Es una muerte que destruye el alma además del cuerpo.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="vital-grid">
+        <div class="vital-card">
+            <div class="vital-label"><span>HEALTH POINTS</span><span>500,000 / 500,000</span></div>
+            <div class="bar-outer"><div class="bar-inner hp-fill"></div></div>
+            <p style="font-size: 0.7rem; color: #666; margin-top: 10px;">ESTADO CRÍTICO: ESTABLE. REGENERACIÓN DEMONÍACA ACTIVA.</p>
+        </div>
+        <div class="vital-card">
+            <div class="vital-label"><span>BLOODLUST ENERGY</span><span>750,000 / 750,000</span></div>
+            <div class="bar-outer"><div class="bar-inner blood-fill"></div></div>
+            <p style="font-size: 0.7rem; color: #666; margin-top: 10px;">NECESIDAD DE SANGRE: 95.2%. INESTABILIDAD SIN EJECUCIÓN RECIENTE.</p>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">Expediente Demoníaco</h2>
+        <div class="info-grid">
+            <div class="text-block">
+                <h4>Esencia Demonio Consciente</h4>
+                <p>Abyros es la anomalía definitiva: un ser que murió y regresó no como fantasma, sino como demonio viviente. Su existencia es una respuesta directa al trauma masivo provocado por la traición de Lucario. La caída al Infierno de la Violencia no lo destruyó; lo reforjó completamente.</p>
+                <p>Su presencia altera el comportamiento de seres vivos en un radio de 30 metros, generando ansiedad inexplicable y la sensación de ser observado. Su clasificación SS+ refleja su peligrosidad absoluta y su completa disociación de cualquier forma de compasión o moralidad convencional.</p>
+                
+                <h4>Psicología Fragmentada: El Sarcasmo como Arma</h4>
+                <p>A pesar de su naturaleza brutal, Abyros mantiene una ironía cruel. Se burla de sus víctimas, les recuerda sus errores, y disfruta viendo el miedo en sus ojos. Este comportamiento no es sadismo gratuito, sino una forma de procesar su propio trauma: convirtiendo a otros en víctimas como él lo fue.</p>
+            </div>
+            <div class="text-block">
+                <h4>Patrones de Conducta y Manías Detectadas</h4>
+                <p>Presenta una dependencia extrema de sangre fresca para mantener su estabilidad mental y física. Sin ejecuciones regulares, su mente se fragmenta y pierde el control total. Su comportamiento sádico y burlón suele preceder a una ejecución, utilizando el miedo como arma psicológica primaria.</p>
+                <p>Odia profundamente cualquier forma de traición o mentira, reaccionando con hostilidad extrema ante estos estímulos. La "inclinación de cabeza de 90 grados" es un protocolo de análisis de debilidades, no un gesto casual. Limpia obsesivamente su espada incluso durante combate.</p>
+            </div>
+        </div>
+    </section>
+
+    <section style="margin-bottom: 180px;">
+        <h2 class="section-title">Perfil Psicológico</h2>
+        
+        <div class="info-grid">
+            <div class="text-block">
+                <h4>Personalidad</h4>
+                <p><strong style="color: var(--crimson-pure);">Calculador:</strong> Cada movimiento está planeado. Observa, analiza y ejecuta con precisión quirúrgica.</p>
+                <p><strong style="color: var(--crimson-pure);">Sádico:</strong> Disfruta el miedo en los ojos de sus víctimas. No es crueldad sin sentido, es procesamiento del trauma.</p>
+                <p><strong style="color: var(--crimson-pure);">Implacable:</strong> Una vez marca un objetivo, no existe escape. La muerte es inevitable.</p>
+                <p><strong style="color: var(--crimson-pure);">Burlón:</strong> Se mofa de sus enemigos, recordándoles sus errores antes de ejecutarlos.</p>
+                <p><strong style="color: var(--crimson-pure);">Vengativo absoluto:</strong> Lucario es su obsesión. Cada ejecución es práctica para ese momento final.</p>
+            </div>
+
+            <div class="text-block">
+                <h4>Gustos Registrados</h4>
+                <p>• <strong style="color: var(--crimson-pure);">La sangre fresca</strong> - Fuente de poder y cordura</p>
+                <p>• <strong style="color: var(--crimson-pure);">El silencio previo</strong> - Calma antes de la tormenta</p>
+                <p>• <strong style="color: var(--crimson-pure);">El miedo ajeno</strong> - Confirmación de dominio</p>
+                <p>• <strong style="color: var(--crimson-pure);">Limpiar su espada</strong> - Ritual de satisfacción</p>
+                <p>• <strong style="color: var(--crimson-pure);">Hablar con cadáveres</strong> - Diálogos post-mortem</p>
+                <p>• <strong style="color: var(--crimson-pure);">La agonía prolongada</strong> - Arte de la ejecución</p>
+
+                <h4 style="margin-top: 40px;">Disgustos Documentados</h4>
+                <p>• <strong style="color: var(--crimson-pure);">La traición</strong> - Gatillo de furia absoluta</p>
+                <p>• <strong style="color: var(--crimson-pure);">La compasión</strong> - Debilidad inaceptable</p>
+                <p>• <strong style="color: var(--crimson-pure);">Falsas promesas</strong> - Eco del pasado</p>
+                <p>• <strong style="color: var(--crimson-pure);">La luz pura</strong> - Recuerdo de lo perdido</p>
+                <p>• <strong style="color: var(--crimson-pure);">Su forma anterior</strong> - Símbolo de debilidad</p>
+            </div>
+        </div>
+    </section>
+
+    <section style="margin-bottom: 180px;">
+        <h2 class="section-title">Análisis Táctico</h2>
+        
+        <div class="info-grid">
+            <div class="text-block">
+                <h4>Fortalezas Operacionales (7)</h4>
+                <div style="margin: 20px 0; padding: 15px; background: #0a0000; border-left: 3px solid var(--crimson-pure);">
+                    <p><strong>1. Ejecución perfecta</strong> - Ningún objetivo ha escapado jamás</p>
+                </div>
+                <div style="margin: 20px 0; padding: 15px; background: #0a0000; border-left: 3px solid var(--crimson-pure);">
+                    <p><strong>2. Absorción de sangre</strong> - Se fortalece con cada muerte</p>
+                </div>
+                <div style="margin: 20px 0; padding: 15px; background: #0a0000; border-left: 3px solid var(--crimson-pure);">
+                    <p><strong>3. Resistencia demoníaca</strong> - El dolor lo alimenta, no lo debilita</p>
+                </div>
+                <div style="margin: 20px 0; padding: 15px; background: #0a0000; border-left: 3px solid var(--crimson-pure);">
+                    <p><strong>4. Maestría de espada</strong> - La Bloodreaper es extensión de su ser</p>
+                </div>
+                <div style="margin: 20px 0; padding: 15px; background: #0a0000; border-left: 3px solid var(--crimson-pure);">
+                    <p><strong>5. Intimidación pasiva</strong> - Su presencia paraliza de terror</p>
+                </div>
+                <div style="margin: 20px 0; padding: 15px; background: #0a0000; border-left: 3px solid var(--crimson-pure);">
+                    <p><strong>6. Análisis psicológico</strong> - Detecta debilidades emocionales instantáneamente</p>
+                </div>
+                <div style="margin: 20px 0; padding: 15px; background: #0a0000; border-left: 3px solid var(--crimson-pure);">
+                    <p><strong>7. Ejecución ritual</strong> - Cada muerte es calculada y perfecta</p>
+                </div>
+            </div>
+
+            <div class="text-block">
+                <h4>Debilidades Críticas (7)</h4>
+                <div style="margin: 20px 0; padding: 15px; background: #0a0000; border-left: 3px solid #777;">
+                    <p><strong>1. Dependencia de sangre</strong> - Sin ella, pierde control mental</p>
+                </div>
+                <div style="margin: 20px 0; padding: 15px; background: #0a0000; border-left: 3px solid #777;">
+                    <p><strong>2. Obsesión con Lucario</strong> - Puede ser manipulado con su nombre</p>
+                </div>
+                <div style="margin: 20px 0; padding: 15px; background: #0a0000; border-left: 3px solid #777;">
+                    <p><strong>3. Fragmentación mental</strong> - Su psique está rota permanentemente</p>
+                </div>
+                <div style="margin: 20px 0; padding: 15px; background: #0a0000; border-left: 3px solid #777;">
+                    <p><strong>4. Ojo dañado</strong> - Punto ciego explotable</p>
+                </div>
+                <div style="margin: 20px 0; padding: 15px; background: #0a0000; border-left: 3px solid #777;">
+                    <p><strong>5. Recuerdos del pasado</strong> - "Innocent Shiny" lo desestabiliza</p>
+                </div>
+                <div style="margin: 20px 0; padding: 15px; background: #0a0000; border-left: 3px solid #777;">
+                    <p><strong>6. Combate sin espada</strong> - Poder reducido significativamente</p>
+                </div>
+                <div style="margin: 20px 0; padding: 15px; background: #0a0000; border-left: 3px solid #777;">
+                    <p><strong>7. Aislamiento absoluto</strong> - No coopera, siempre solo</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="margin-bottom: 180px;">
+        <h2 class="section-title">Comportamiento Observable</h2>
+        
+        <div class="info-grid">
+            <div class="text-block">
+                <h4>Manías Detectadas</h4>
+                <p>• Inclina la cabeza 90 grados al observar víctimas</p>
+                <p>• Limpia la espada incluso durante combate</p>
+                <p>• Habla con los cadáveres después de ejecutar</p>
+                <p>• Ríe en voz baja antes del golpe final</p>
+                <p>• Camina entre cuerpos sin mirarlos</p>
+                <p>• Golpea el suelo con la espada rítmicamente</p>
+                <p>• Respira profundamente antes de atacar</p>
+                <p>• Mira fijamente los ojos del enemigo</p>
+                <p>• Se detiene justo antes del golpe mortal</p>
+                <p>• Repite frases del momento de la traición</p>
+                <p>• Sonríe al escuchar súplicas</p>
+                <p>• Cuenta mentalmente cada ejecución</p>
+            </div>
+
+            <div class="text-block">
+                <h4>Hábitos Operacionales</h4>
+                <p>• Ejecuta sin dudar ni negociar</p>
+                <p>• Absorbe sangre inmediatamente tras cada muerte</p>
+                <p>• Afila su espada constantemente</p>
+                <p>• Mata uno por uno, nunca en masa</p>
+                <p>• Jamás deja sobrevivientes</p>
+                <p>• Provoca psicológicamente antes de ejecutar</p>
+                <p>• Avanza caminando, nunca corriendo</p>
+                <p>• Usa el silencio como arma táctica</p>
+                <p>• Recuerda el nombre de cada víctima</p>
+                <p>• Fuerza fases superiores para dominio total</p>
+                <p>• Nunca retrocede en combate</p>
+                <p>• Duerme con la espada en sus manos</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="text-block" style="width: 100%; margin-bottom: 180px;">
+        <h2 class="section-title">Crónica de la Caída y Resurrección</h2>
+        <p>Antes del abismo, Abyros era un Sylveon Shiny destinado a heredar un trono ancestral. Su empatía profunda y su naturaleza tímida lo convertían en el candidato perfecto para liderar con compasión. Pero su mejor amigo, Lucario, envenenado por la envidia y la ambición, no podía soportar vivir bajo su sombra.</p>
+        <p>La traición fue brutal: un golpe por la espalda que destrozó su ojo izquierdo, seguido de un empujón hacia el abismo que conecta directamente con el Infierno de la Violencia. Lucario creyó que Abyros moriría. Se equivocó terriblemente.</p>
+        <p>Durante décadas incontables, el infierno desgarró su cuerpo, fragmentó su mente, y transformó su alma. Aprendió que la sangre es poder, que matar mantiene la cordura, y que la violencia no es un acto sino un lenguaje. Su pelaje blanco se tiñó de gris y luego de rojo carmesí. Su empatía murió y nació el demonio.</p>
+        <p>Cuando finalmente emergió, ya no era el heredero tímido. Era el Ángel de la Violencia, una entidad viva-corrompida con un solo propósito: encontrar a Lucario y mostrarle exactamente qué monstruo había creado con su traición. Cada ejecución es práctica. Cada muerte es un paso más hacia la venganza definitiva.</p>
+    </section>
+
+    <section style="margin-bottom: 180px;">
+        <h2 class="section-title">Armamento: Bloodreaper</h2>
+        
+        <div style="width: 100%; max-width: 1200px; margin: 0 auto 80px; border: 2px solid var(--crimson-pure); background: #000; padding: 25px; box-shadow: 0 0 60px rgba(220, 20, 60, 0.1); animation: shadowPulse 7s infinite;">
+            <div style="width: 100%; aspect-ratio: 16 / 9; background: #0a0000; position: relative; overflow: hidden;">
+                <video controls style="width: 100%; height: 100%; object-fit: cover;" poster="bloodreaper_poster.jpg">
+                    <source src="weapon.mp4" type="video/mp4">
+                    <source src="bloodreaper_video.webm" type="video/webm">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #666; font-size: 1.2rem; text-align: center;">
+                        VIDEO NO SOPORTADO POR TU NAVEGADOR
+                    </div>
+                </video>
+            </div>
+            <div style="text-align: right; padding: 10px; font-size: 0.7rem; color: #555;">
+                VIDEO / ANIMACIÓN POR: <span style="color: #fff;">ElementalLeyends</span>
+            </div>
+        </div>
+        
+        <div class="info-grid">
+            <div class="text-block">
+                <h4>Protocolo BLOOD HARVEST: Absorción Total</h4>
+                <p>La Bloodreaper no es solo un arma; es una entidad parasitaria que eligió a Abyros como portador. Cada contacto con sangre activa su capacidad de drenaje total, absorbiendo el 100% de la energía vital del objetivo en un proceso dolorosamente lento para la víctima pero instantáneo para observadores externos.</p>
+                <p>La espada se alimenta y alimenta a Abyros simultáneamente, creando un ciclo de dependencia mutua. Sin ella, Abyros pierde el 60% de su poder. Sin Abyros, la espada vuelve a su estado inerte esperando al próximo ejecutor digno.</p>
+            </div>
+            <div class="text-block">
+                <h4>Protocolo CRIMSON JUDGMENT: Sentencia de Sangre</h4>
+                <p>En modo de ejecución ritual, la Bloodreaper canaliza toda la sangre absorbida previamente para crear un único golpe devastador que no solo mata el cuerpo, sino que fragmenta el alma del objetivo. Las víctimas experimentan todo el dolor que Abyros sufrió en el infierno condensado en un solo segundo eterno.</p>
+                <p>Este protocolo solo se activa cuando Abyros ha determinado que la víctima merece un castigo absoluto. Es reservado exclusivamente para traidores y aquellos cuya existencia él considera "ruido en el sistema de la justicia".</p>
+            </div>
+        </div>
+    </section>
+
+    <h2 class="section-title">Sistema de Logs Demoníacos</h2>
+    <div class="log-terminal">
+        > [INITIATING DEMONIC_010_ARCHIVE_OVERRIDE...]<br>
+        > [BLOODLUST_SUBROUTINE_ACTIVATED: 95.2% HUNGER_CRITICAL]<br>
+        > [BLOODREAPER_STATUS: SATURATED // READY_FOR_HARVEST]<br>
+        > [TARGET_ACQUISITION_PROTOCOL: LUCARIO_SIGNATURE_PRIORITY_OMEGA]<br>
+        > [PSYCHOLOGICAL_STATE: FRAGMENTED_STABLE // SARCASM_PROTOCOLS_FUNCTIONAL]<br>
+        > [WARNING: BLOOD_LEVELS_CRITICAL // IMMEDIATE_EXECUTION_RECOMMENDED_FOR_STABILITY]<br>
+        > [DEMONIC_REGENERATION_STATUS: ACTIVE // HP_RESTORATION_CONTINUOUS]<br>
+        > [MENTAL_ANCHOR: VENGEANCE // LUCARIO_OBSESSION_INDEX: 99.9%]<br>
+        > [EYE_FRAGMENT_ANALYSIS: SCANNING_FOR_WEAKNESS... // TARGET_DETECTED]<br>
+        > [AUDIT_LOG: "EL INFIERNO NO ME HIZO ESTO. TÚ LO HICISTE." // QUOTE_LOGGED]<br>
+        > [THREAT_ASSESSMENT: SCANNING_TRAITORS... // MULTIPLE_TARGETS_IDENTIFIED]<br>
+        > [MESSAGE_FROM_ABYROS: "Soy lo que jamás debieron haberme matado. Y ahora... es tu turno."]<br>
+        > [EXECUTION_AUTHORIZED // ELIMINATING_BETRAYERS_FROM_EXISTENCE]<br>
+        > [STATUS_REPORT: BLOODREAPER_READY // PREPARING_FOR_FINAL_VENGEANCE]
+    </div>
+
+    <section class="quotes-section">
+        <h2>MONÓLOGO FINAL // CITAS DE ABYROS</h2>
+        <div class="quote-item">
+            <span class="quote-text">"Soy lo que jamás debieron haberme matado."</span>
+            <span class="quote-author">ABYROS // PROTOCOL: RESURRECTION</span>
+        </div>
+        <div class="quote-item">
+            <span class="quote-text">"El infierno no me hizo esto. Tú lo hiciste."</span>
+            <span class="quote-author">ABYROS // THE FINAL JUDGMENT</span>
+        </div>
+        <div class="quote-item">
+            <span class="quote-text">"Tu sangre tiene un sabor particular... a traición y miedo."</span>
+            <span class="quote-author">ABYROS // THE HARVESTER</span>
+        </div>
+        <div class="quote-item">
+            <span class="quote-text">"Lucario me enseñó que la confianza mata. Ahora yo enseño que la traición duele más."</span>
+            <span class="quote-author">ABYROS // VENGEANCE PROTOCOL</span>
+        </div>
+        <div class="quote-item">
+            <span class="quote-text">"Cada ejecución es práctica. Cada muerte me acerca a ti, viejo amigo."</span>
+            <span class="quote-author">ABYROS // THE OBSESSED</span>
+        </div>
+        <div class="quote-item">
+            <span class="quote-text">"No supliques. Yo supliqué una vez. No funcionó."</span>
+            <span class="quote-author">ABYROS // AFTERMATH</span>
+        </div>
+    </section>
+
+    <a href="abyros_eng.html" class="final-nav-btn">English Version →</a>
+
+    <footer>
+        DEMONIC PROJECT // 2026 // "EL INFIERNO NO ME HIZO ESTO" // ElementalLeyends
+    </footer>
+
+</div>
+
+</body>
+</html>
