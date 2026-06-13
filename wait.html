@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abyros // Coming Soon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gray-dark:#0e0e0e; --orange:#e07800; --orange-glow:#ff9a00;
+            --crimson:#8b1020; --crimson-hi:#b01535; --cream:#f0ede8;
+            --gray-body:#3a3a3a; --gray-light:#6a6a6a;
+        }
+
+        @keyframes scanline    { 0%{transform:translateY(-100%)} 100%{transform:translateY(1200%)} }
+        @keyframes cursorGlow  { 0%,100%{filter:drop-shadow(0 0 2px #8b1020) drop-shadow(0 0 5px #6b0c18)} 50%{filter:drop-shadow(0 0 5px #cc1828) drop-shadow(0 0 12px #8b1020)} }
+        @keyframes emberFloat  { 0%{transform:translateY(0) translateX(0);opacity:0} 10%{opacity:1} 90%{opacity:.5} 100%{transform:translateY(-110px) translateX(22px);opacity:0} }
+        @keyframes glitch      { 0%{text-shadow:2px 2px var(--orange),-2px -2px var(--crimson)} 50%{text-shadow:-4px -2px var(--orange),4px 2px var(--crimson),0 0 30px var(--orange)} 100%{text-shadow:2px 2px var(--orange),-2px -2px var(--crimson)} }
+        @keyframes pulseBorder { 0%,100%{box-shadow:0 0 18px rgba(139,16,32,.3)} 50%{box-shadow:0 0 50px rgba(139,16,32,.8),0 0 100px rgba(224,120,0,.2)} }
+        @keyframes fadeSlideUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes blink       { 0%,100%{opacity:1} 50%{opacity:0} }
+
+        /* Scratch drawing animation */
+        @keyframes drawScratch {
+            0%   { stroke-dashoffset: var(--len); opacity:0 }
+            5%   { opacity:1 }
+            60%  { stroke-dashoffset: 0; opacity:1 }
+            85%  { stroke-dashoffset: 0; opacity:.9 }
+            100% { stroke-dashoffset: 0; opacity:1 }
+        }
+        @keyframes scratchGlow {
+            0%,100% { filter: drop-shadow(0 0 3px var(--crimson)) }
+            50%     { filter: drop-shadow(0 0 10px var(--crimson-hi)) drop-shadow(0 0 20px var(--orange)) }
+        }
+        @keyframes bloodDrip {
+            0%   { transform: scaleY(0); transform-origin: top; opacity:0 }
+            30%  { opacity:1 }
+            100% { transform: scaleY(1); transform-origin: top; opacity:.85 }
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family:'Rajdhani',sans-serif;
+            background:var(--gray-dark);
+            color:var(--cream);
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            overflow:hidden;
+            cursor:none;
+            position:relative;
+        }
+
+        /* Noise overlay */
+        body::after {
+            content:"";
+            position:fixed; inset:0;
+            background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            opacity:.03; pointer-events:none; z-index:9997;
+        }
+
+        /* Scanline */
+        body::before {
+            content:"";
+            position:fixed; top:0; left:0; width:100%; height:3px;
+            background:rgba(224,120,0,.2);
+            z-index:9999; pointer-events:none;
+            animation:scanline 5s linear infinite;
+        }
+
+        /* Custom cursor */
+        .custom-cursor {
+            position:fixed; width:52px; height:52px;
+            pointer-events:none; z-index:10000;
+            transform:translate(-50%,-50%);
+            transition:transform .1s ease;
+            animation:cursorGlow 2.2s ease-in-out infinite;
+        }
+        .custom-cursor svg { width:100%; height:100%; overflow:visible; }
+
+        /* Ember particles */
+        .ember {
+            position:fixed; width:4px; height:4px;
+            background:var(--orange); border-radius:50%;
+            pointer-events:none;
+            animation:emberFloat 4s ease-in infinite;
+            box-shadow:0 0 8px var(--orange-glow);
+        }
+
+        /* Main wrapper */
+        .scene {
+            display:flex; flex-direction:column; align-items:center;
+            gap:0; position:relative; z-index:10;
+        }
+
+        /* Scratch SVG container */
+        .scratch-wrap {
+            width:min(520px, 92vw);
+            animation:fadeSlideUp .6s ease-out both;
+        }
+
+        /* Each scratch path */
+        .scratch-svg .s {
+            fill:none;
+            stroke:var(--crimson);
+            stroke-linecap:round;
+            stroke-linejoin:round;
+            animation: drawScratch var(--dur) var(--delay) cubic-bezier(.4,0,.2,1) both,
+                       scratchGlow 2.5s ease-in-out infinite var(--gdelay);
+            stroke-dasharray: var(--len);
+            stroke-dashoffset: var(--len);
+        }
+
+        /* Blood drip elements */
+        .drip {
+            animation: bloodDrip .6s ease-out var(--ddelay) both;
+        }
+
+        /* Coming Soon text block */
+        .text-block {
+            text-align:center;
+            padding:32px 40px 36px;
+            margin-top:-18px;
+            background:linear-gradient(160deg,rgba(20,8,8,.92) 0%,rgba(10,10,10,.97) 100%);
+            border:2px solid var(--orange);
+            position:relative;
+            width:min(520px, 92vw);
+            animation:fadeSlideUp .7s .5s ease-out both, pulseBorder 3.5s infinite;
+        }
+        .text-block::before {
+            content:'';
+            position:absolute; inset:5px;
+            border:1px solid rgba(224,120,0,.15);
+            pointer-events:none;
+        }
+
+        .coming-soon {
+            font-family:'Cinzel Decorative',serif;
+            font-size:clamp(1.4rem, 5vw, 2.4rem);
+            font-weight:900;
+            letter-spacing:8px;
+            color:var(--cream);
+            animation:glitch 4s infinite;
+            line-height:1.2;
+        }
+
+        .sub {
+            margin-top:14px;
+            font-family:'Rajdhani',sans-serif;
+            font-size:.88rem;
+            font-weight:600;
+            letter-spacing:5px;
+            color:var(--orange);
+            text-transform:uppercase;
+        }
+
+        .cursor-blink {
+            display:inline-block;
+            width:2px; height:1em;
+            background:var(--orange);
+            vertical-align:middle;
+            margin-left:4px;
+            animation:blink 1s step-end infinite;
+        }
+
+        /* Decorative corner marks */
+        .corner { position:absolute; width:14px; height:14px; border-color:var(--crimson); border-style:solid; }
+        .corner.tl { top:10px; left:10px; border-width:2px 0 0 2px; }
+        .corner.tr { top:10px; right:10px; border-width:2px 2px 0 0; }
+        .corner.bl { bottom:10px; left:10px; border-width:0 0 2px 2px; }
+        .corner.br { bottom:10px; right:10px; border-width:0 2px 2px 0; }
+
+        @media(max-width:480px) {
+            .coming-soon { letter-spacing:4px; }
+            .text-block { padding:24px 20px 28px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Custom cursor -->
+    <div class="custom-cursor" id="cursor">
+        <svg viewBox="0 0 52 56" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <filter id="cg" x="-60%" y="-60%" width="220%" height="220%">
+                    <feGaussianBlur stdDeviation="1.8" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+            </defs>
+            <path d="M26,30 C18,28 14,20 18,13 C22,6 30,6 34,13 C38,20 34,28 26,30 Z" fill="none" stroke="#5a0a14" stroke-width="3.8" stroke-linejoin="round"/>
+            <path d="M26,30 C30,23 38,22 43,27 C48,32 46,40 39,42 C32,44 27,38 26,30 Z" fill="none" stroke="#5a0a14" stroke-width="3.8" stroke-linejoin="round"/>
+            <path d="M26,30 C22,23 14,22 9,27 C4,32 6,40 13,42 C20,44 25,38 26,30 Z" fill="none" stroke="#5a0a14" stroke-width="3.8" stroke-linejoin="round"/>
+            <path d="M18,22 C17,19 18,16 19,14" fill="none" stroke="#0e0e0e" stroke-width="5.5" stroke-linecap="butt"/>
+            <path d="M34,22 C36,20 38,21 40,23" fill="none" stroke="#0e0e0e" stroke-width="5.5" stroke-linecap="butt"/>
+            <path d="M20,40 C19,38 18,36 17,33" fill="none" stroke="#0e0e0e" stroke-width="5.5" stroke-linecap="butt"/>
+            <path d="M10,29 C8,26 8,23 10,20 C12,17 15,15 18,14" fill="none" stroke="#8b1020" stroke-width="3.8" stroke-linecap="round" filter="url(#cg)"/>
+            <path d="M34,13 C37,16 38,19 38,22 C38,24 37,26 36,27" fill="none" stroke="#8b1020" stroke-width="3.8" stroke-linecap="round" filter="url(#cg)"/>
+            <path d="M27,38 C28,40 30,41 32,42 C35,42 38,41 39,39" fill="none" stroke="#8b1020" stroke-width="3.8" stroke-linecap="round" filter="url(#cg)"/>
+            <circle cx="26" cy="30" r="2.2" fill="#cc1828" filter="url(#cg)"/>
+        </svg>
+    </div>
+
+    <div class="scene">
+
+        <!-- Scratch mark SVG -->
+        <div class="scratch-wrap">
+            <svg class="scratch-svg" viewBox="0 0 520 240" xmlns="http://www.w3.org/2000/svg" width="100%">
+                <defs>
+                    <filter id="sf" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="1.2" result="blur"/>
+                        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                </defs>
+
+                <!-- Scratch 1 — long diagonal slash, top-left to bottom-right -->
+                <path class="s" filter="url(#sf)"
+                    d="M 62 28 C 80 40, 140 80, 190 115 C 230 143, 290 175, 320 200"
+                    stroke-width="5.5"
+                    style="--len:420; --dur:0.9s; --delay:0.1s; --gdelay:0s"/>
+
+                <!-- Scratch 2 — parallel slash slightly offset -->
+                <path class="s" filter="url(#sf)"
+                    d="M 88 22 C 110 38, 170 82, 220 118 C 258 147, 310 178, 345 202"
+                    stroke-width="4"
+                    style="--len:440; --dur:0.85s; --delay:0.25s; --gdelay:.4s"/>
+
+                <!-- Scratch 3 — another close slash with slight wobble -->
+                <path class="s" filter="url(#sf)"
+                    d="M 112 18 C 130 32, 195 80, 248 120 C 292 154, 346 185, 375 207"
+                    stroke-width="3"
+                    style="--len:450; --dur:0.8s; --delay:0.4s; --gdelay:.8s"/>
+
+                <!-- Scratch 4 — leftmost thin hairline -->
+                <path class="s" filter="url(#sf)"
+                    d="M 40 35 C 60 55, 100 82, 140 112 C 175 138, 210 158, 240 178"
+                    stroke-width="2"
+                    style="--len:320; --dur:0.75s; --delay:0.55s; --gdelay:1.2s"/>
+
+                <!-- Scratch 5 — rightmost extra slash -->
+                <path class="s" filter="url(#sf)"
+                    d="M 148 14 C 175 38, 250 90, 305 133 C 355 170, 405 198, 430 215"
+                    stroke-width="3.5"
+                    style="--len:470; --dur:0.88s; --delay:0.15s; --gdelay:.6s"/>
+
+                <!-- Blood drip 1 — hangs from scratch 2 around midpoint -->
+                <g class="drip" style="--ddelay:1.1s">
+                    <path d="M 220 118 C 218 130, 214 148, 215 162 C 215 172, 218 178, 220 180 C 222 178, 225 172, 225 162 C 226 148, 222 130, 220 118 Z"
+                        fill="#8b1020" stroke="none"/>
+                </g>
+
+                <!-- Blood drip 2 — hangs from scratch 1 near end -->
+                <g class="drip" style="--ddelay:1.3s">
+                    <path d="M 290 175 C 288 188, 285 206, 286 218 C 286 226, 289 232, 290 234 C 291 232, 294 226, 294 218 C 295 206, 292 188, 290 175 Z"
+                        fill="#8b1020" stroke="none"/>
+                </g>
+
+                <!-- Blood drip 3 — small one on scratch 3 -->
+                <g class="drip" style="--ddelay:1.5s">
+                    <path d="M 160 96 C 159 105, 157 118, 158 127 C 158 133, 160 137, 161 138 C 162 137, 164 133, 164 127 C 165 118, 163 105, 160 96 Z"
+                        fill="#6b0c18" stroke="none"/>
+                </g>
+
+                <!-- Scratch 6 — short aggressive hook at top -->
+                <path class="s" filter="url(#sf)"
+                    d="M 200 10 C 215 22, 240 44, 258 62 C 270 74, 278 84, 280 92"
+                    stroke-width="4.5"
+                    style="--len:220; --dur:0.65s; --delay:0.6s; --gdelay:1s"/>
+
+                <!-- Scratch 7 — tiny thin accent bottom-right cluster -->
+                <path class="s" filter="url(#sf)"
+                    d="M 340 170 C 358 182, 390 198, 415 212 C 432 222, 450 230, 462 236"
+                    stroke-width="2.5"
+                    style="--len:200; --dur:0.6s; --delay:0.7s; --gdelay:1.4s"/>
+
+            </svg>
+        </div>
+
+        <!-- Text block -->
+        <div class="text-block">
+            <div class="corner tl"></div>
+            <div class="corner tr"></div>
+            <div class="corner bl"></div>
+            <div class="corner br"></div>
+
+            <div class="coming-soon">COMING SOON<span class="cursor-blink"></span></div>
+            <div class="sub">// Próximamente //</div>
+        </div>
+
+    </div>
+
+    <script>
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top  = e.clientY + 'px';
+        });
+        document.addEventListener('click', () => {
+            cursor.style.transform = 'translate(-50%,-50%) scale(1.4) rotate(120deg)';
+            setTimeout(() => cursor.style.transform = 'translate(-50%,-50%) scale(1)', 220);
+        });
+
+        function createEmber() {
+            const e = document.createElement('div');
+            e.className = 'ember';
+            e.style.left = Math.random() * 100 + '%';
+            e.style.bottom = '0';
+            e.style.animationDelay    = Math.random() * 2 + 's';
+            e.style.animationDuration = (3 + Math.random() * 2) + 's';
+            document.body.appendChild(e);
+            setTimeout(() => e.remove(), 6000);
+        }
+        setInterval(createEmber, 500);
+    </script>
+
+</body>
+</html>
