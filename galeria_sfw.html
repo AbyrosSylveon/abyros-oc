@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abyros // SFW Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gray-dark:#0e0e0e; --orange:#e07800; --orange-glow:#ff9a00;
+            --crimson:#8b1020; --crimson-hi:#b01535; --cream:#f0ede8;
+            --gray-body:#3a3a3a; --gray-light:#6a6a6a;
+        }
+        @keyframes fadeIn      { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes pulseCrimson{ 0%,100%{box-shadow:0 0 18px rgba(139,16,32,.4)} 50%{box-shadow:0 0 40px rgba(139,16,32,.9),0 0 80px rgba(224,120,0,.25)} }
+        @keyframes scanline    { 0%{transform:translateY(-100%)} 100%{transform:translateY(1200%)} }
+        @keyframes glitch      { 0%{text-shadow:2px 2px var(--orange),-2px -2px var(--crimson)} 50%{text-shadow:-2px -2px var(--orange),2px 2px var(--crimson)} 100%{text-shadow:2px 2px var(--orange),-2px -2px var(--crimson)} }
+        @keyframes cursorGlow  { 0%,100%{filter:drop-shadow(0 0 2px #8b1020) drop-shadow(0 0 5px #6b0c18)} 50%{filter:drop-shadow(0 0 5px #cc1828) drop-shadow(0 0 12px #8b1020)} }
+        @keyframes emberFloat  { 0%{transform:translateY(0) translateX(0);opacity:0} 10%{opacity:1} 90%{opacity:.5} 100%{transform:translateY(-110px) translateX(22px);opacity:0} }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family:'Rajdhani',sans-serif;
+            background:var(--gray-dark);
+            color:var(--cream);
+            min-height:100vh;
+            padding:100px 20px 60px;
+            position:relative;
+            overflow-x:hidden;
+            cursor:none;
+        }
+        body::after {
+            content:"";
+            position:fixed;
+            inset:0;
+            background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            opacity:.03;
+            pointer-events:none;
+            z-index:9997;
+        }
+        body::before {
+            content:"";
+            position:fixed;
+            top:0; left:0;
+            width:100%; height:3px;
+            background:rgba(224,120,0,.25);
+            z-index:9999;
+            pointer-events:none;
+            animation:scanline 5s linear infinite;
+        }
+
+        .custom-cursor {
+            position:fixed;
+            width:52px; height:52px;
+            pointer-events:none;
+            z-index:10000;
+            transform:translate(-50%,-50%);
+            transition:transform .1s ease;
+            animation:cursorGlow 2.2s ease-in-out infinite;
+        }
+        .custom-cursor svg { width:100%; height:100%; overflow:visible; }
+
+        .ember {
+            position:absolute;
+            width:4px; height:4px;
+            background:var(--orange);
+            border-radius:50%;
+            pointer-events:none;
+            animation:emberFloat 4s ease-in infinite;
+            box-shadow:0 0 8px var(--orange-glow);
+        }
+
+        .back-btn {
+            position:fixed;
+            top:30px; left:30px;
+            padding:10px 20px;
+            background:rgba(14,14,14,.8);
+            border:1px solid var(--orange);
+            color:var(--cream);
+            text-decoration:none;
+            font-family:'Rajdhani',sans-serif;
+            font-size:.9rem;
+            font-weight:600;
+            letter-spacing:3px;
+            z-index:1000;
+            transition:all .3s;
+        }
+        .back-btn:hover { background:rgba(224,120,0,.15); box-shadow:0 0 20px rgba(224,120,0,.4); }
+
+        .container {
+            max-width:1200px;
+            margin:0 auto;
+            animation:fadeIn 1s ease-out;
+            position:relative;
+            z-index:10;
+        }
+
+        .header {
+            text-align:center;
+            margin-bottom:44px;
+            padding:28px;
+            background:linear-gradient(160deg,rgba(20,8,8,.9) 0%,rgba(10,10,10,.95) 100%);
+            border:2px solid var(--orange);
+            position:relative;
+            animation:pulseCrimson 3.5s infinite;
+        }
+        .header::before {
+            content:'';
+            position:absolute;
+            inset:4px;
+            border:1px solid rgba(224,120,0,.18);
+            pointer-events:none;
+        }
+        .header h1 {
+            font-family:'Cinzel Decorative',serif;
+            font-size:2.2rem;
+            font-weight:900;
+            letter-spacing:8px;
+            margin-bottom:8px;
+            color:var(--cream);
+            animation:glitch 4s infinite;
+        }
+        .header .subtitle {
+            font-family:'Rajdhani',sans-serif;
+            font-size:.9rem;
+            font-weight:600;
+            color:var(--orange);
+            letter-spacing:5px;
+            text-transform:uppercase;
+        }
+
+        .total-count {
+            text-align:center;
+            margin-bottom:36px;
+            padding:16px;
+            background:rgba(0,0,0,.35);
+            border:1px solid var(--orange);
+            font-family:'Rajdhani',sans-serif;
+            font-size:1rem;
+            font-weight:700;
+            letter-spacing:4px;
+            color:var(--orange);
+        }
+
+        /* GRID: siempre 3 columnas fijas */
+        .image-grid {
+            display:grid;
+            grid-template-columns:repeat(3, 1fr);
+            gap:24px;
+            margin-bottom:50px;
+        }
+
+        .image-item {
+            position:relative;
+            overflow:hidden;
+            background:rgba(0,0,0,.6);
+            border:2px solid var(--gray-body);
+            transition:all .3s;
+            cursor:pointer;
+            display:flex;
+            flex-direction:column;
+        }
+        .image-item:hover {
+            border-color:var(--orange);
+            box-shadow:0 0 28px rgba(224,120,0,.5);
+            transform:scale(1.04);
+        }
+        .image-item img {
+            width:100%;
+            height:280px;
+            object-fit:cover;
+            display:block;
+            background:#111;
+            flex-shrink:0;
+        }
+        .image-caption {
+            padding:14px;
+            background:rgba(0,0,0,.88);
+            border-top:1px solid var(--orange);
+            flex:1;
+        }
+        .image-title {
+            font-family:'Rajdhani',sans-serif;
+            font-size:.95rem;
+            font-weight:700;
+            letter-spacing:2px;
+            margin-bottom:4px;
+            color:var(--orange);
+            text-transform:uppercase;
+        }
+        .image-artist {
+            font-family:'Rajdhani',sans-serif;
+            font-size:.82rem;
+            color:var(--crimson-hi);
+            margin-bottom:6px;
+        }
+        .image-desc {
+            font-family:'Rajdhani',sans-serif;
+            font-size:.78rem;
+            color:var(--gray-light);
+            line-height:1.5;
+        }
+        .nsfw-badge {
+            position:absolute;
+            top:10px; right:10px;
+            background:var(--crimson);
+            color:#fff;
+            padding:4px 10px;
+            font-family:'Rajdhani',sans-serif;
+            font-size:.72rem;
+            font-weight:700;
+            letter-spacing:1px;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display:none;
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.97);
+            z-index:10000;
+            justify-content:center;
+            align-items:center;
+        }
+        .lightbox.active { display:flex; }
+        .lightbox img {
+            max-width:90%;
+            max-height:90%;
+            border:2px solid var(--orange);
+            box-shadow:0 0 50px rgba(224,120,0,.4);
+        }
+        .lightbox-close {
+            position:absolute;
+            top:28px; right:28px;
+            font-size:2.8rem;
+            color:var(--orange);
+            cursor:pointer;
+            z-index:10001;
+            font-family:'Rajdhani',sans-serif;
+        }
+
+        @media(max-width:900px){ .image-grid{grid-template-columns:repeat(2,1fr)} }
+        @media(max-width:600px){ .image-grid{grid-template-columns:1fr} .header h1{font-size:1.6rem} .back-btn{top:15px;left:15px} }
+    </style>
+</head>
+<body>
+
+    <!-- Cursor personalizado -->
+    <div class="custom-cursor" id="cursor">
+        <svg viewBox="0 0 52 56" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <filter id="cg" x="-60%" y="-60%" width="220%" height="220%">
+                    <feGaussianBlur stdDeviation="1.8" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+            </defs>
+            <path d="M26,30 C18,28 14,20 18,13 C22,6 30,6 34,13 C38,20 34,28 26,30 Z" fill="none" stroke="#5a0a14" stroke-width="3.8" stroke-linejoin="round"/>
+            <path d="M26,30 C30,23 38,22 43,27 C48,32 46,40 39,42 C32,44 27,38 26,30 Z" fill="none" stroke="#5a0a14" stroke-width="3.8" stroke-linejoin="round"/>
+            <path d="M26,30 C22,23 14,22 9,27 C4,32 6,40 13,42 C20,44 25,38 26,30 Z" fill="none" stroke="#5a0a14" stroke-width="3.8" stroke-linejoin="round"/>
+            <path d="M18,22 C17,19 18,16 19,14" fill="none" stroke="#0e0e0e" stroke-width="5.5" stroke-linecap="butt"/>
+            <path d="M34,22 C36,20 38,21 40,23" fill="none" stroke="#0e0e0e" stroke-width="5.5" stroke-linecap="butt"/>
+            <path d="M20,40 C19,38 18,36 17,33" fill="none" stroke="#0e0e0e" stroke-width="5.5" stroke-linecap="butt"/>
+            <path d="M10,29 C8,26 8,23 10,20 C12,17 15,15 18,14" fill="none" stroke="#8b1020" stroke-width="3.8" stroke-linecap="round" filter="url(#cg)"/>
+            <path d="M34,13 C37,16 38,19 38,22 C38,24 37,26 36,27" fill="none" stroke="#8b1020" stroke-width="3.8" stroke-linecap="round" filter="url(#cg)"/>
+            <path d="M27,38 C28,40 30,41 32,42 C35,42 38,41 39,39" fill="none" stroke="#8b1020" stroke-width="3.8" stroke-linecap="round" filter="url(#cg)"/>
+            <circle cx="26" cy="30" r="2.2" fill="#cc1828" filter="url(#cg)"/>
+        </svg>
+    </div>
+
+    <a href="abyros_galeria.html" class="back-btn">← VOLVER</a>
+
+    <div class="container">
+
+        <!-- Encabezado -->
+        <div class="header">
+            <h1>SFW GALLERY</h1>
+            <p class="subtitle">✓ Safe For Work // Apto para todo público</p>
+        </div>
+
+        <!-- Contador — actualiza el número cuando agregues imágenes -->
+        <div class="total-count">TOTAL ARTWORKS: 6</div>
+
+        <!-- ============================================================
+             GRID DE IMÁGENES
+             Para agregar una imagen, copia el bloque de una artwork
+             existente y pégalo aquí dentro del grid.
+             Recuerda actualizar TOTAL ARTWORKS arriba.
+        ============================================================ -->
+        <div class="image-grid">
+
+            <!-- // ARTWORK 1 -->
+            <div class="image-item" onclick="openLightbox('https://i.postimg.cc/pdJG9T6V/export202411202052566617.png')">
+                <img src="https://i.postimg.cc/pdJG9T6V/export202411202052566617.png" alt="Artwork 1">
+                <div class="image-caption">
+                    <div class="image-title">Cant Hold Me</div>
+                    <div class="image-artist">Artist: ToyWasYeeted</div>
+                    <div class="image-desc">Try again...</div>
+                </div>
+            </div>
+            <!-- // FIN ARTWORK 1 -->
+
+            <!-- // ARTWORK 2 -->
+            <div class="image-item" onclick="openLightbox('https://i.postimg.cc/Jz1Kfmh9/Untitled-12-14-2024-08-53-01.png')">
+                <img src="https://i.postimg.cc/Jz1Kfmh9/Untitled-12-14-2024-08-53-01.png" alt="Artwork 2">
+                <div class="image-caption">
+                    <div class="image-title">Head icon</div>
+                    <div class="image-artist">Artist: Kerbie</div>
+                    <div class="image-desc">I dont bite...</div>
+                </div>
+            </div>
+            <!-- // FIN ARTWORK 2 -->
+
+            <!-- // ARTWORK 3 -->
+            <div class="image-item" onclick="openLightbox('https://i.postimg.cc/7Pn2pzTx/abyros.png')">
+                <img src="https://i.postimg.cc/7Pn2pzTx/abyros.png" alt="Artwork 3">
+                <div class="image-caption">
+                    <div class="image-title">Aby</div>
+                    <div class="image-artist">Artist: youfrasn</div>
+                    <div class="image-desc">Not hugs... i dunno</div>
+                </div>
+            </div>
+            <!-- // FIN ARTWORK 3 -->
+
+            <!-- // ARTWORK 4 -->
+            <div class="image-item" onclick="openLightbox('https://i.postimg.cc/hP4bkL8s/abyros-ready-for-battle-by-mdjune-dj7tgwn-414w-2x.jpg')">
+                <img src="https://i.postimg.cc/hP4bkL8s/abyros-ready-for-battle-by-mdjune-dj7tgwn-414w-2x.jpg" alt="Artwork 4">
+                <div class="image-caption">
+                    <div class="image-title">Ready for battle</div>
+                    <div class="image-artist">Artist: MDJune</div>
+                    <div class="image-desc">Show me what you're capable of!</div>
+                </div>
+            </div>
+            
+            <div class="image-item" onclick="openLightbox('https://i.postimg.cc/NGJhRSSz/FB-IMG-1758139883744.jpg')">
+                <img src="https://i.postimg.cc/NGJhRSSz/FB-IMG-1758139883744.jpg">
+                <div class="image-caption">
+                    <div class="image-title">Chilling</div>
+                    <div class="image-artist">Artist: Leosaur</div>
+                    <div class="image-desc">You lost something?</div>
+                </div>
+            </div>
+            
+            <div class="image-item" onclick="openLightbox('https://i.postimg.cc/KvWRp9kD/export202506021831485378-(1).png')">
+                <img src="https://i.postimg.cc/KvWRp9kD/export202506021831485378-(1).png">
+                <div class="image-caption">
+                    <div class="image-title">You havent seen the best of me</div>
+                    <div class="image-artist">Artist: ToyWasYeeted</div>
+                    <div class="image-desc">...</div>
+                </div>
+            </div>
+            <!-- ========================================================
+                 // PARA AGREGAR MÁS IMÁGENES: copia el bloque de abajo
+                 y pégalo antes de este comentario. Cambia los datos.
+
+            <div class="image-item" onclick="openLightbox('URL_DE_LA_IMAGEN')">
+                <img src="URL_DE_LA_IMAGEN">
+                <div class="image-caption">
+                    <div class="image-title">TÍTULO</div>
+                    <div class="image-artist">Artist: NOMBRE</div>
+                    <div class="image-desc">Descripción corta</div>
+                </div>
+            </div>
+
+            ======================================================== -->
+
+
+
+        </div>
+        <!-- // FIN GRID -->
+
+    </div>
+    <!-- // FIN CONTAINER -->
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">×</span>
+        <img id="lightbox-img" src="" alt="">
+    </div>
+
+    <script>
+        // Cursor personalizado
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top  = e.clientY + 'px';
+        });
+        document.addEventListener('click', () => {
+            cursor.style.transform = 'translate(-50%,-50%) scale(1.4) rotate(120deg)';
+            setTimeout(() => cursor.style.transform = 'translate(-50%,-50%) scale(1)', 220);
+        });
+
+        // Brasas flotantes
+        function createEmber() {
+            const e = document.createElement('div');
+            e.className = 'ember';
+            e.style.left = Math.random() * 100 + '%';
+            e.style.bottom = '0';
+            e.style.animationDelay    = Math.random() * 2 + 's';
+            e.style.animationDuration = (3 + Math.random() * 2) + 's';
+            document.body.appendChild(e);
+            setTimeout(() => e.remove(), 6000);
+        }
+        setInterval(createEmber, 500);
+
+        // Lightbox
+        function openLightbox(src) {
+            if (!src || src === 'URL_DE_LA_IMAGEN') return;
+            document.getElementById('lightbox').classList.add('active');
+            document.getElementById('lightbox-img').src = src;
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+    </script>
+
+</body>
+</html>
