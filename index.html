@@ -121,8 +121,11 @@
 
         /* LAYOUT */
         .container{max-width:620px;width:100%;animation:fadeIn 1s ease-out;position:relative;z-index:10}
-        .lang-switch{position:absolute;top:30px;right:30px;z-index:1000}
-        .lang-btn{padding:8px 18px;background:rgba(14,14,14,.8);border:1px solid var(--orange);color:var(--cream);font-family:'Rajdhani',sans-serif;font-size:.85rem;font-weight:600;letter-spacing:3px;cursor:pointer}
+        .lang-switch{position:fixed;top:30px;right:30px;z-index:1000;display:flex;gap:0}
+        .lang-btn{padding:8px 16px;background:rgba(14,14,14,.8);border:1px solid var(--orange);color:var(--gray-light);font-family:'Rajdhani',sans-serif;font-size:.85rem;font-weight:600;letter-spacing:3px;cursor:pointer;transition:all .25s}
+        .lang-btn:first-child{border-right:none}
+        .lang-btn:hover{background:rgba(224,120,0,.1);color:var(--cream)}
+        .lang-btn.active{background:rgba(224,120,0,.2);color:var(--orange);box-shadow:inset 0 0 10px rgba(224,120,0,.15)}
         .header{text-align:center;margin-bottom:50px;padding:32px 28px;background:linear-gradient(160deg,rgba(20,8,8,.9) 0%,rgba(10,10,10,.95) 100%);border:2px solid var(--orange);position:relative;animation:pulseCrimson 3.5s infinite;transition:border-color .2s,box-shadow .2s}
         .header::before{content:'';position:absolute;inset:4px;border:1px solid rgba(224,120,0,.18);pointer-events:none}
         .header h1{font-family:'Cinzel Decorative',serif;font-size:2.8rem;font-weight:900;letter-spacing:10px;margin-bottom:10px;color:var(--cream);animation:glitch 4s infinite}
@@ -281,7 +284,10 @@
         </svg>
     </div>
 
-    <div class="lang-switch"><span class="lang-btn">ES / EN</span></div>
+    <div class="lang-switch">
+        <button class="lang-btn" id="btn-es" onclick="setLang('es')">ESP</button>
+        <button class="lang-btn" id="btn-en" onclick="setLang('en')">ENG</button>
+    </div>
 
     <div class="container">
         <div class="header">
@@ -294,80 +300,84 @@
         <div class="profile-section">
             <img src="https://i.postimg.cc/Jz1Kfmh9/Untitled-12-14-2024-08-53-01.png" alt="Abyros Profile" class="profile-img">
             <div class="profile-name">ABYROS</div>
-            <div class="profile-bio">
-                "Tu cuello parece bastante fragil... cuidalo, seria una pena perderlo pronto , pero hoy estoy de buen humor :3."<br>
-                <span style="font-size:.8rem;color:#666;">"Your neck looks quite fragile... take care of it, it would be a shame to lose it soon, but I'm in a good mood today :3."</span>
+            <div class="profile-bio"
+                 data-es='"Tu cuello parece bastante frágil... cuídalo, sería una pena perderlo pronto, pero hoy estoy de buen humor :3."'
+                 data-en='"Your neck looks quite fragile... take care of it, it would be a shame to lose it soon, but I&apos;m in a good mood today :3."'>
             </div>
         </div>
 
         <div class="links-section">
             <h2 class="section-title">OC INFO</h2>
             <a href="wait.html" class="link-card">
-                <div class="link-card-title"><span>PERFIL COMPLETO // FULL PROFILE</span></div>
-                <div class="link-card-desc">Información completa, estadísticas y análisis // Complete information, stats and analysis</div>
+                <div class="link-card-title"><span data-es="PERFIL COMPLETO" data-en="FULL PROFILE"></span></div>
+                <div class="link-card-desc" data-es="Información completa, estadísticas y análisis" data-en="Complete information, stats and analysis"></div>
             </a>
             <a href="wait.html" class="link-card">
-                <div class="link-card-title"><span>DATOS CURIOSOS // FUN FACTS</span></div>
-                <div class="link-card-desc">Secretos, trivia y detalles ocultos // Secrets, trivia and hidden details</div>
+                <div class="link-card-title"><span data-es="DATOS CURIOSOS" data-en="FUN FACTS"></span></div>
+                <div class="link-card-desc" data-es="Secretos, trivia y detalles ocultos" data-en="Secrets, trivia and hidden details"></div>
             </a>
         </div>
 
         <div class="links-section">
-            <h2 class="section-title">REDES SOCIALES</h2>
+            <h2 class="section-title" data-es="REDES SOCIALES" data-en="SOCIAL MEDIA"></h2>
             <a href="wait.html" class="link-card">
-                <div class="link-card-title"><span>VER TODAS LAS REDES // SEE ALL SOCIALS</span></div>
-                <div class="link-card-desc">Links a YouTube, Twitter, Instagram, Discord y más // Links to YouTube, Twitter, Instagram, Discord and more</div>
+                <div class="link-card-title"><span data-es="VER TODAS LAS REDES" data-en="SEE ALL SOCIALS"></span></div>
+                <div class="link-card-desc" data-es="Links a YouTube, Twitter, Instagram, Discord y más" data-en="Links to YouTube, Twitter, Instagram, Discord and more"></div>
             </a>
             <a href="wait.html" class="link-card">
-                <div class="link-card-title"><span>DONACIONES & INVITACIONES // DONATIONS & INVITES</span></div>
-                <div class="link-card-desc">Donaciones via PayPal e invitaciones a apps para apoyarme // PayPal donations and app invites to support me</div>
+                <div class="link-card-title"><span data-es="DONACIONES &amp; INVITACIONES" data-en="DONATIONS &amp; INVITES"></span></div>
+                <div class="link-card-desc" data-es="Donaciones via PayPal e invitaciones a apps para apoyarme" data-en="PayPal donations and app invites to support me"></div>
             </a>
         </div>
 
         <div class="links-section">
-            <h2 class="section-title">ARTE // ART</h2>
+            <h2 class="section-title" data-es="ARTE" data-en="ART"></h2>
             <a href="abyros_galeria.html" class="link-card">
-                <div class="link-card-title"><span>GALERÍA DE ARTE // ART GALLERY</span></div>
-                <div class="link-card-desc">Ilustraciones oficiales y fan art // Official artwork and fan art</div>
+                <div class="link-card-title"><span data-es="GALERÍA DE ARTE" data-en="ART GALLERY"></span></div>
+                <div class="link-card-desc" data-es="Ilustraciones oficiales y fan art" data-en="Official artwork and fan art"></div>
             </a>
             <a href="wait.html" class="link-card">
-                <div class="link-card-title"><span>CÓMO DIBUJAR A MI SYLVEON // HOW TO DRAW MY SYLVEON</span></div>
-                <div class="link-card-desc">Guía paso a paso con imágenes para dibujar a Abyros // Step by step image guide to draw Abyros</div>
+                <div class="link-card-title"><span data-es="CÓMO DIBUJAR A MI SYLVEON" data-en="HOW TO DRAW MY SYLVEON"></span></div>
+                <div class="link-card-desc" data-es="Guía paso a paso con imágenes para dibujar a Abyros" data-en="Step by step image guide to draw Abyros"></div>
             </a>
         </div>
 
         <div class="links-section">
             <h2 class="section-title">NEXUS</h2>
             <a href="wait.html" class="link-card">
-                <div class="link-card-title"><span>JUEGOS QUE JUEGO // GAMES I PLAY</span></div>
-                <div class="link-card-desc">Lista de juegos, favoritos y recomendaciones // Game list, favorites and recommendations</div>
+                <div class="link-card-title"><span data-es="JUEGOS QUE JUEGO" data-en="GAMES I PLAY"></span></div>
+                <div class="link-card-desc" data-es="Lista de juegos, favoritos y recomendaciones" data-en="Game list, favorites and recommendations"></div>
             </a>
             <a href="wait.html" class="link-card">
-                <div class="link-card-title"><span>JUEGOS // GAMES</span></div>
-                <div class="link-card-desc">Juegos creados por mí — generales y exclusivos de Abyros // Games made by me — general and Abyros exclusive</div>
+                <div class="link-card-title"><span data-es="JUEGOS" data-en="GAMES"></span></div>
+                <div class="link-card-desc" data-es="Juegos creados por mí — generales y exclusivos de Abyros" data-en="Games made by me — general and Abyros exclusive"></div>
             </a>
             <a href="wait.html" class="link-card">
-                <div class="link-card-title"><span>HISTORIAS Y RELATOS // STORIES &amp; TALES</span></div>
-                <div class="link-card-desc">Relatos, aventuras y lore del personaje // Stories, adventures and character lore</div>
+                <div class="link-card-title"><span data-es="HISTORIAS Y RELATOS" data-en="STORIES &amp; TALES"></span></div>
+                <div class="link-card-desc" data-es="Relatos, aventuras y lore del personaje" data-en="Stories, adventures and character lore"></div>
             </a>
         </div>
 
         <div class="links-section">
             <h2 class="section-title">ELEMENTAL LEYENDS</h2>
             <a href="https://elementalleyends.pages.dev/" class="link-card">
-                <div class="link-card-title"><span>EL CLAN OFICIAL // THE OFFICIAL CLAN</span></div>
-                <div class="link-card-desc">Informacion detallada del clan y otras cosas // Detailed info about the clan and other things</div>
+                <div class="link-card-title"><span data-es="EL CLAN OFICIAL" data-en="THE OFFICIAL CLAN"></span></div>
+                <div class="link-card-desc" data-es="Información detallada del clan y otras cosas" data-en="Detailed info about the clan and other things"></div>
             </a>
         </div>
 
         <div class="updates-section">
-            <div class="updates-header"><div class="updates-title">ACTUALIZACIONES // UPDATES</div></div>
+            <div class="updates-header">
+                <div class="updates-title" data-es="ACTUALIZACIONES" data-en="UPDATES"></div>
+            </div>
             <div class="update-item">
                 <div class="update-version">BETA</div>
-                <div class="update-date">13 de Junio, 2026 // June 13, 2026</div>
-                <div class="update-description"><strong>¡Lanzamiento Inicial!</strong> // <strong>Initial Release!</strong></div>
+                <div class="update-date" data-es="13 de Junio, 2026" data-en="June 13, 2026"></div>
+                <div class="update-description">
+                    <strong data-es="¡Lanzamiento Inicial!" data-en="Initial Release!"></strong>
+                </div>
                 <ul class="update-list">
-                    <li>Terminar lo demas // Finish the rest</li>
+                    <li data-es="Terminar lo demás" data-en="Finish the rest"></li>
                 </ul>
             </div>
         </div>
@@ -379,6 +389,7 @@
     </div>
 
     <script>
+        // ── CURSOR ──────────────────────────────────────────────
         const cursor = document.getElementById('cursor');
         document.addEventListener('mousemove', e => {
             cursor.style.left = e.clientX + 'px';
@@ -389,6 +400,7 @@
             setTimeout(() => cursor.style.transform = 'translate(-50%,-50%) scale(1)', 220);
         });
 
+        // ── EMBERS ──────────────────────────────────────────────
         function createEmber() {
             const e = document.createElement('div');
             e.className = 'ember';
@@ -406,6 +418,30 @@
             })
         );
 
+        // ── LANGUAGE SWITCH ─────────────────────────────────────
+        function applyLang(lang) {
+            // Update all elements with data-es / data-en
+            document.querySelectorAll('[data-es]').forEach(el => {
+                el.innerHTML = el.getAttribute('data-' + lang);
+            });
+            // Button active states
+            document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            // html lang attribute
+            document.documentElement.lang = lang;
+            // Save to localStorage so other pages can read it too
+            localStorage.setItem('abyros-lang', lang);
+        }
+
+        function setLang(lang) {
+            applyLang(lang);
+        }
+
+        // On load: read saved preference, default to 'es'
+        const savedLang = localStorage.getItem('abyros-lang') || 'es';
+        applyLang(savedLang);
+
+        // ── COLLAPSE ─────────────────────────────────────────────
         const vignette = document.getElementById('c-vignette');
         const redwash  = document.getElementById('c-redwash');
         const bolts    = document.getElementById('c-bolts');
@@ -417,7 +453,7 @@
             ["YOU HAVEN'T EVEN SEEN...", "THE BEST OF ME!!!"],
             ["GOD", "IS DEAD"],
             ["LETS BURN IN HELL",    "TOGETHER"],
-            ["HELL DIDNT DO THIS",       "TO ME"],
+            ["HELL DIDNT DO THIS",   "TO ME"],
         ];
 
         let collapseActive = false;
