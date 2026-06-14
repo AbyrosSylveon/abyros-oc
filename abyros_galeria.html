@@ -24,8 +24,6 @@
         @keyframes hellfire    { 0%,100%{box-shadow:0 0 12px rgba(224,120,0,.3),inset 0 0 8px rgba(139,16,32,.15);border-color:var(--orange)} 50%{box-shadow:0 0 28px rgba(224,120,0,.7),inset 0 0 18px rgba(139,16,32,.3);border-color:var(--crimson-hi)} }
         @keyframes burn        { 0%,100%{transform:translateY(0) scale(1)} 25%{transform:translateY(-3px) scale(1.01)} 75%{transform:translateY(3px) scale(.99)} }
         @keyframes cursorGlow  { 0%,100%{filter:drop-shadow(0 0 2px #8b1020) drop-shadow(0 0 5px #6b0c18)} 50%{filter:drop-shadow(0 0 5px #cc1828) drop-shadow(0 0 12px #8b1020)} }
-         10%{transform:translate(-7px,-4px) rotate(-.6deg)} 20%{transform:translate(9px,3px) rotate(.8deg)} 30%{transform:translate(-6px,7px) rotate(-.4deg)} 40%{transform:translate(8px,-6px) rotate(.6deg)} 50%{transform:translate(-9px,3px) rotate(-.7deg)} 60%{transform:translate(6px,-7px) rotate(.5deg)} 70%{transform:translate(-8px,5px) rotate(-.6deg)} 80%{transform:translate(5px,-4px) rotate(.4deg)} 90%{transform:translate(-4px,6px) rotate(-.3deg)} }
-         8%{clip-path:inset(20% 0 30% 0);transform:translateX(-10px)} 16%{clip-path:inset(55% 0 5% 0);transform:translateX(10px)} 24%{clip-path:inset(10% 0 50% 0);transform:translateX(-6px)} 32%{clip-path:inset(40% 0 20% 0);transform:translateX(8px)} 40%,100%{clip-path:inset(0 0 0 0);transform:translateX(0)} }
         @keyframes emberFloat  { 0%{transform:translateY(0) translateX(0);opacity:0} 10%{opacity:1} 90%{opacity:.5} 100%{transform:translateY(-110px) translateX(22px);opacity:0} }
 
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -43,6 +41,12 @@
         }
         body::after  { content:""; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity:.03; pointer-events:none; z-index:9997; }
         body::before { content:""; position:fixed; top:0; left:0; width:100%; height:3px; background:rgba(224,120,0,.25); z-index:9999; pointer-events:none; animation:scanline 5s linear infinite; }
+
+        .lang-switch{position:fixed;top:30px;right:30px;z-index:1000;display:flex;gap:0}
+        .lang-btn{padding:8px 16px;background:rgba(14,14,14,.8);border:1px solid var(--orange);color:var(--gray-light);font-family:'Rajdhani',sans-serif;font-size:.85rem;font-weight:600;letter-spacing:3px;cursor:pointer;transition:all .25s}
+        .lang-btn:first-child{border-right:none}
+        .lang-btn:hover{background:rgba(224,120,0,.1);color:var(--cream)}
+        .lang-btn.active{background:rgba(224,120,0,.2);color:var(--orange);box-shadow:inset 0 0 10px rgba(224,120,0,.15)}
 
         /* COLLAPSE */
         
@@ -123,7 +127,10 @@
 </head>
 <body>
 
-    
+    <!-- Lang switch -->
+    <div class="lang-switch">
+        <button class="lang-btn" id="btn-es" onclick="setLang('es')">ESP</button>
+        <button class="lang-btn" id="btn-en" onclick="setLang('en')">ENG</button>
     </div>
 
     <!-- CURSOR -->
@@ -143,30 +150,26 @@
         </svg>
     </div>
 
-    <a href="index.html" class="back-btn">← VOLVER</a>
+    <a href="index.html" class="back-btn" data-es="← VOLVER" data-en="← BACK"></a>
 
     <div class="container">
         <div class="header">
-            <h1>GALERÍA</h1>
-            <p class="subtitle">Art Gallery // Arte</p>
+            <h1 data-es="GALERÍA" data-en="GALLERY"></h1>
+            <p class="subtitle" data-es="Arte // Art Gallery" data-en="Art Gallery // Arte"></p>
         </div>
 
         <div class="gallery-grid">
             <a href="galeria_sfw.html" class="gallery-card">
                 <div class="gallery-icon">🎨</div>
                 <div class="gallery-title">SFW GALLERY</div>
-                <div class="gallery-desc">
-                    Arte apto para todo público<br>Art suitable for all audiences
-                </div>
-                <div class="access-badge free">✓ ACCESO LIBRE</div>
+                <div class="gallery-desc" data-es="Arte apto para todo público" data-en="Art suitable for all audiences"></div>
+                <div class="access-badge free" data-es="✓ ACCESO LIBRE" data-en="✓ FREE ACCESS"></div>
             </a>
 
             <div class="gallery-card nsfw" onclick="showWarning()">
                 <div class="gallery-icon">🔞</div>
                 <div class="gallery-title">NSFW GALLERY</div>
-                <div class="gallery-desc">
-                    Contenido para mayores de 18 años<br>Content for 18+ only
-                </div>
+                <div class="gallery-desc" data-es="Contenido para mayores de 18 años" data-en="Content for 18+ only"></div>
                 <div class="access-badge restricted">⚠ +18 ONLY</div>
             </div>
         </div>
@@ -176,36 +179,49 @@
     <div class="modal" id="warningModal">
         <div class="modal-content">
             <div class="modal-icon">⚠️</div>
-            <div class="modal-title">ADVERTENCIA</div>
-            <div class="modal-text">
-                Estás a punto de acceder a contenido NSFW (+18).<br>
-                You are about to access NSFW content (+18).<br><br>
-                Debes tener al menos 18 años para continuar.<br>
-                You must be at least 18 years old to continue.<br><br>
-                <strong style="color:var(--crimson-hi)">NO ME HAGO RESPONSABLE POR LO QUE PUEDAS VER AQUÍ.</strong><br>
-                <strong style="color:var(--crimson-hi)">I AM NOT RESPONSIBLE FOR WHAT YOU MAY SEE HERE.</strong><br><br>
-                ¿Confirmas que eres mayor de edad? // Do you confirm you are of legal age?
+            <div class="modal-title" data-es="ADVERTENCIA" data-en="WARNING"></div>
+            <div class="modal-text"
+                 data-es='Estás a punto de acceder a contenido NSFW (+18).<br><br>Debes tener al menos 18 años para continuar.<br><br><strong style="color:var(--crimson-hi)">NO ME HAGO RESPONSABLE POR LO QUE PUEDAS VER AQUÍ.</strong><br><br>¿Confirmas que eres mayor de edad?'
+                 data-en='You are about to access NSFW content (+18).<br><br>You must be at least 18 years old to continue.<br><br><strong style="color:var(--crimson-hi)">I AM NOT RESPONSIBLE FOR WHAT YOU MAY SEE HERE.</strong><br><br>Do you confirm you are of legal age?'>
             </div>
             <div class="modal-buttons">
-                <button class="modal-btn accept" onclick="acceptWarning()">SOY CONSCIENTE</button>
-                <button class="modal-btn cancel" onclick="closeWarning()">CANCELAR</button>
+                <button class="modal-btn accept" onclick="acceptWarning()" data-es="SOY CONSCIENTE" data-en="I UNDERSTAND"></button>
+                <button class="modal-btn cancel" onclick="closeWarning()" data-es="CANCELAR" data-en="CANCEL"></button>
             </div>
         </div>
     </div>
 
     <script>
+        // ── CURSOR ───────────────────────────────────────────────
         const cursor = document.getElementById('cursor');
         document.addEventListener('mousemove', e => { cursor.style.left=e.clientX+'px'; cursor.style.top=e.clientY+'px'; });
         document.addEventListener('click', () => { cursor.style.transform='translate(-50%,-50%) scale(1.4) rotate(120deg)'; setTimeout(()=>cursor.style.transform='translate(-50%,-50%) scale(1)',220); });
 
+        // ── EMBERS ───────────────────────────────────────────────
         function createEmber() { const e=document.createElement('div'); e.className='ember'; e.style.left=Math.random()*100+'%'; e.style.bottom='0'; e.style.animationDelay=Math.random()*2+'s'; e.style.animationDuration=(3+Math.random()*2)+'s'; document.body.appendChild(e); setTimeout(()=>e.remove(),6000); }
         setInterval(createEmber,500);
 
+        // ── MODAL ────────────────────────────────────────────────
         function showWarning()  { document.getElementById('warningModal').classList.add('active'); }
         function closeWarning() { document.getElementById('warningModal').classList.remove('active'); }
         function acceptWarning(){ window.location.href='galeria_nsfw.html'; }
         document.getElementById('warningModal').addEventListener('click',function(e){ if(e.target===this) closeWarning(); });
 
-        </script>
+        // ── LANGUAGE SWITCH ──────────────────────────────────────
+        function applyLang(lang) {
+            document.querySelectorAll('[data-es]').forEach(el => {
+                el.innerHTML = el.getAttribute('data-' + lang);
+            });
+            document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            document.documentElement.lang = lang;
+            localStorage.setItem('abyros-lang', lang);
+        }
+
+        function setLang(lang) { applyLang(lang); }
+
+        // On load: read saved preference, default to 'es'
+        applyLang(localStorage.getItem('abyros-lang') || 'es');
+    </script>
 </body>
 </html>
